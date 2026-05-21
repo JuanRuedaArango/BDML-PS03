@@ -1,0 +1,29 @@
+.base,variable,n_total,n_validos,n_missing,pct_missing,n_1,prop_1,variable_label,grupo
+Test,cerca_transporte,10286,10286,0,0,1617,0.15720396655648455,Menciona transporte,Texto del anuncio
+Test,cocina_integral,10286,10286,0,0,1892,0.1839393350184717,Cocina integral,Texto del anuncio
+Test,es_duplex,10286,10286,0,0,811,0.07884503208244216,Dúplex,Texto del anuncio
+Test,es_lujo,10286,10286,0,0,1281,0.12453820727202022,Señal de lujo,Texto del anuncio
+Test,es_penthouse,10286,10286,0,0,185,0.017985611510791366,Penthouse,Texto del anuncio
+Test,remodelado,10286,10286,0,0,1509,0.1467042582150496,Remodelado,Texto del anuncio
+Test,tiene_balcon,10286,10286,0,0,2118,0.20591094691814116,Tiene balcón,Texto del anuncio
+Test,tiene_deposito,10286,10286,0,0,3572,0.3472681314407933,Tiene depósito,Texto del anuncio
+Test,tiene_gimnasio,10286,10286,0,0,2509,0.2439237798950029,Tiene gimnasio,Texto del anuncio
+Test,tiene_parqueadero,10286,10286,0,0,7130,0.6931751895780672,Tiene parqueadero,Texto del anuncio
+Test,tiene_piscina,10286,10286,0,0,550,0.05347073692397433,Tiene piscina,Texto del anuncio
+Test,tiene_seguridad,10286,10286,0,0,2705,0.26297880614427377,Tiene seguridad,Texto del anuncio
+Test,tiene_terraza,10286,10286,0,0,3302,0.3210188605872059,Tiene terraza,Texto del anuncio
+Test,zonas_verdes,10286,10286,0,0,6143,0.5972195216799533,Menciona zonas verdes,Texto del anuncio
+Train,cerca_transporte,38644,38644,0,0,9320,0.2411758617120381,Menciona transporte,Texto del anuncio
+Train,cocina_integral,38644,38644,0,0,10697,0.27680881896284026,Cocina integral,Texto del anuncio
+Train,es_duplex,38644,38644,0,0,2681,0.06937687609978263,Dúplex,Texto del anuncio
+Train,es_lujo,38644,38644,0,0,3022,0.07820101438774454,Señal de lujo,Texto del anuncio
+Train,es_penthouse,38644,38644,0,0,674,0.017441258668874856,Penthouse,Texto del anuncio
+Train,remodelado,38644,38644,0,0,3413,0.08831901459476245,Remodelado,Texto del anuncio
+Train,tiene_balcon,38644,38644,0,0,7918,0.2048959735017079,Tiene balcón,Texto del anuncio
+Train,tiene_deposito,38644,38644,0,0,13849,0.3583738743401304,Tiene depósito,Texto del anuncio
+Train,tiene_gimnasio,38644,38644,0,0,9197,0.23799296139116033,Tiene gimnasio,Texto del anuncio
+Train,tiene_parqueadero,38644,38644,0,0,26864,0.6951661318704068,Tiene parqueadero,Texto del anuncio
+Train,tiene_piscina,38644,38644,0,0,2312,0.059828175137149366,Tiene piscina,Texto del anuncio
+Train,tiene_seguridad,38644,38644,0,0,10635,0.27520443018321084,Tiene seguridad,Texto del anuncio
+Train,tiene_terraza,38644,38644,0,0,11621,0.30071938722699515,Tiene terraza,Texto del anuncio
+Train,zonas_verdes,38644,38644,0,0,23411,0.6058120277403996,Menciona zonas verdes,Texto del anuncio

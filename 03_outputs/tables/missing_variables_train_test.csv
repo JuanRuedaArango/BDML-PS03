@@ -1,0 +1,69 @@
+.base,variable,n_total,n_missing,pct_missing,grupo,variable_label
+Test,ESTRATO,10286,0,0,Datos Abiertos Bogotá,Estrato
+Test,GRUPOUSOEC,10286,0,0,Datos Abiertos Bogotá,Grupo de uso económico
+Test,MED_VALOR_,10286,0,0,Datos Abiertos Bogotá,Mediana valor referencia
+Test,NO_PREDIOS,10286,0,0,Datos Abiertos Bogotá,Número de predios
+Test,Numero_banos,10286,0,0,Características estructurales,Número de baños
+Test,Numero_bedrooms,10286,0,0,Características estructurales,Número de habitaciones
+Test,Numero_rooms,10286,3761,36.564262103830444,Características estructurales,Número de cuartos
+Test,V_REF,10286,0,0,Datos Abiertos Bogotá,Valor de referencia
+Test,cerca_transporte,10286,0,0,Texto del anuncio,Menciona transporte
+Test,cocina_integral,10286,0,0,Texto del anuncio,Cocina integral
+Test,dist_aeropuerto,10286,0,0,OSM: distancias y conteos,Distancia a aeropuerto
+Test,dist_cai,10286,0,0,OSM: distancias y conteos,Distancia a CAI / policía
+Test,dist_centro,10286,0,0,OSM: distancias y conteos,Distancia al centro
+Test,dist_hospital,10286,0,0,OSM: distancias y conteos,Distancia a hospital
+Test,dist_parque,10286,0,0,OSM: distancias y conteos,Distancia a parque
+Test,dist_transmilenio,10286,0,0,OSM: distancias y conteos,Distancia a estación de transporte
+Test,es_duplex,10286,0,0,Texto del anuncio,Dúplex
+Test,es_lujo,10286,0,0,Texto del anuncio,Señal de lujo
+Test,es_penthouse,10286,0,0,Texto del anuncio,Penthouse
+Test,n_colegios_1km,10286,0,0,OSM: distancias y conteos,Colegios en 1 km
+Test,n_estaciones_1km,10286,0,0,OSM: distancias y conteos,Estaciones en 1 km
+Test,n_supermercados_1km,10286,0,0,OSM: distancias y conteos,Supermercados en 1 km
+Test,n_tiendas_1km,10286,0,0,OSM: distancias y conteos,Tiendas en 1 km
+Test,remodelado,10286,0,0,Texto del anuncio,Remodelado
+Test,seguridad,10286,0,0,Datos Abiertos Bogotá,Seguridad
+Test,superficie,10286,4898,47.618121718841145,Características estructurales,Superficie
+Test,tiene_balcon,10286,0,0,Texto del anuncio,Tiene balcón
+Test,tiene_deposito,10286,0,0,Texto del anuncio,Tiene depósito
+Test,tiene_gimnasio,10286,0,0,Texto del anuncio,Tiene gimnasio
+Test,tiene_parqueadero,10286,0,0,Texto del anuncio,Tiene parqueadero
+Test,tiene_piscina,10286,0,0,Texto del anuncio,Tiene piscina
+Test,tiene_seguridad,10286,0,0,Texto del anuncio,Tiene seguridad
+Test,tiene_terraza,10286,0,0,Texto del anuncio,Tiene terraza
+Test,zonas_verdes,10286,0,0,Texto del anuncio,Menciona zonas verdes
+Train,ESTRATO,38644,0,0,Datos Abiertos Bogotá,Estrato
+Train,GRUPOUSOEC,38644,0,0,Datos Abiertos Bogotá,Grupo de uso económico
+Train,MED_VALOR_,38644,0,0,Datos Abiertos Bogotá,Mediana valor referencia
+Train,NO_PREDIOS,38644,0,0,Datos Abiertos Bogotá,Número de predios
+Train,Numero_banos,38644,0,0,Características estructurales,Número de baños
+Train,Numero_bedrooms,38644,0,0,Características estructurales,Número de habitaciones
+Train,Numero_rooms,38644,14497,37.514232481109616,Características estructurales,Número de cuartos
+Train,V_REF,38644,0,0,Datos Abiertos Bogotá,Valor de referencia
+Train,cerca_transporte,38644,0,0,Texto del anuncio,Menciona transporte
+Train,cocina_integral,38644,0,0,Texto del anuncio,Cocina integral
+Train,dist_aeropuerto,38644,0,0,OSM: distancias y conteos,Distancia a aeropuerto
+Train,dist_cai,38644,0,0,OSM: distancias y conteos,Distancia a CAI / policía
+Train,dist_centro,38644,0,0,OSM: distancias y conteos,Distancia al centro
+Train,dist_hospital,38644,0,0,OSM: distancias y conteos,Distancia a hospital
+Train,dist_parque,38644,0,0,OSM: distancias y conteos,Distancia a parque
+Train,dist_transmilenio,38644,0,0,OSM: distancias y conteos,Distancia a estación de transporte
+Train,es_duplex,38644,0,0,Texto del anuncio,Dúplex
+Train,es_lujo,38644,0,0,Texto del anuncio,Señal de lujo
+Train,es_penthouse,38644,0,0,Texto del anuncio,Penthouse
+Train,n_colegios_1km,38644,0,0,OSM: distancias y conteos,Colegios en 1 km
+Train,n_estaciones_1km,38644,0,0,OSM: distancias y conteos,Estaciones en 1 km
+Train,n_supermercados_1km,38644,0,0,OSM: distancias y conteos,Supermercados en 1 km
+Train,n_tiendas_1km,38644,0,0,OSM: distancias y conteos,Tiendas en 1 km
+Train,remodelado,38644,0,0,Texto del anuncio,Remodelado
+Train,seguridad,38644,0,0,Datos Abiertos Bogotá,Seguridad
+Train,superficie,38644,19298,49.937894627885306,Características estructurales,Superficie
+Train,tiene_balcon,38644,0,0,Texto del anuncio,Tiene balcón
+Train,tiene_deposito,38644,0,0,Texto del anuncio,Tiene depósito
+Train,tiene_gimnasio,38644,0,0,Texto del anuncio,Tiene gimnasio
+Train,tiene_parqueadero,38644,0,0,Texto del anuncio,Tiene parqueadero
+Train,tiene_piscina,38644,0,0,Texto del anuncio,Tiene piscina
+Train,tiene_seguridad,38644,0,0,Texto del anuncio,Tiene seguridad
+Train,tiene_terraza,38644,0,0,Texto del anuncio,Tiene terraza
+Train,zonas_verdes,38644,0,0,Texto del anuncio,Menciona zonas verdes

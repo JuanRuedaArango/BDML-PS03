@@ -1,0 +1,35 @@
+variable,grupo,etiqueta,disponible
+tiene_parqueadero,Texto del anuncio,Tiene parqueadero,TRUE
+tiene_terraza,Texto del anuncio,Tiene terraza,TRUE
+tiene_balcon,Texto del anuncio,Tiene balcón,TRUE
+tiene_deposito,Texto del anuncio,Tiene depósito,TRUE
+tiene_gimnasio,Texto del anuncio,Tiene gimnasio,TRUE
+tiene_piscina,Texto del anuncio,Tiene piscina,TRUE
+tiene_seguridad,Texto del anuncio,Tiene seguridad,TRUE
+cocina_integral,Texto del anuncio,Cocina integral,TRUE
+remodelado,Texto del anuncio,Remodelado,TRUE
+es_lujo,Texto del anuncio,Señal de lujo,TRUE
+es_penthouse,Texto del anuncio,Penthouse,TRUE
+es_duplex,Texto del anuncio,Dúplex,TRUE
+cerca_transporte,Texto del anuncio,Menciona transporte,TRUE
+zonas_verdes,Texto del anuncio,Menciona zonas verdes,TRUE
+Numero_banos,Características estructurales,Número de baños,TRUE
+Numero_bedrooms,Características estructurales,Número de habitaciones,TRUE
+Numero_rooms,Características estructurales,Número de cuartos,TRUE
+superficie,Características estructurales,Superficie,TRUE
+dist_parque,OSM: distancias y conteos,Distancia a parque,TRUE
+dist_hospital,OSM: distancias y conteos,Distancia a hospital,TRUE
+dist_cai,OSM: distancias y conteos,Distancia a CAI / policía,TRUE
+dist_aeropuerto,OSM: distancias y conteos,Distancia a aeropuerto,TRUE
+dist_transmilenio,OSM: distancias y conteos,Distancia a estación de transporte,TRUE
+n_supermercados_1km,OSM: distancias y conteos,Supermercados en 1 km,TRUE
+n_colegios_1km,OSM: distancias y conteos,Colegios en 1 km,TRUE
+dist_centro,OSM: distancias y conteos,Distancia al centro,TRUE
+n_estaciones_1km,OSM: distancias y conteos,Estaciones en 1 km,TRUE
+n_tiendas_1km,OSM: distancias y conteos,Tiendas en 1 km,TRUE
+MED_VALOR_,Datos Abiertos Bogotá,Mediana valor referencia,TRUE
+NO_PREDIOS,Datos Abiertos Bogotá,Número de predios,TRUE
+GRUPOUSOEC,Datos Abiertos Bogotá,Grupo de uso económico,TRUE
+V_REF,Datos Abiertos Bogotá,Valor de referencia,TRUE
+ESTRATO,Datos Abiertos Bogotá,Estrato,TRUE
+seguridad,Datos Abiertos Bogotá,Seguridad,TRUE

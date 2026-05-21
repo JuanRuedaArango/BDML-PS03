@@ -1,0 +1,3 @@
+variable,variable_label,niveles_sin_missing_Test,niveles_sin_missing_Train,moda_Test,moda_Train,pct_moda_Test,pct_moda_Train,pct_missing_Test,pct_missing_Train
+ESTRATO,Estrato,7,7,6,4,0.6529263076025666,0.27805092640513407,0,0
+GRUPOUSOEC,Grupo de uso económico,6,7,RESIDENCIAL,RESIDENCIAL,0.8148940307213689,0.8627988821033019,0,0
