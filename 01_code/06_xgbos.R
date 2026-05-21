@@ -1,188 +1,425 @@
 # ============================================================
-# 0. LIBRERÍAS
+# XGBOOST
+# ============================================================
+
+# ============================================================
+# 1. LIBRERÍAS
 # ============================================================
 
 library(tidymodels)
+library(spatialsample)
+library(sf)
+library(dplyr)
+library(ggplot2)
 library(doParallel)
-library(embed)
-
-tidymodels_prefer()
 
 # ============================================================
-# 1. PARALLEL
+# 2. COPIAS
 # ============================================================
 
-cl <- makePSOCKcluster(parallel::detectCores() - 1)
-registerDoParallel(cl)
+train3 <- train2
+test3  <- test2
 
 # ============================================================
-# 2. FEATURE ENGINEERING (SEGURO)
+# 3. PREPROCESAMIENTO
 # ============================================================
 
-train2 <- train %>%
-  mutate(
-    log_price = log(price),
-    
-    # espaciales
-    lat_lon_interaction = lat * lon,
-    lat2 = lat^2,
-    lon2 = lon^2,
-    
-    # ratios útiles
-    banos_por_habitacion = Numero_banos / pmax(Numero_bedrooms, 1),
-    densidad_servicios = n_supermercados_1km + n_colegios_1km
+train3 <- train3 %>%
+  mutate(across(where(is.logical), as.factor))
+
+test3 <- test3 %>%
+  mutate(across(where(is.logical), as.factor))
+
+train3 <- st_drop_geometry(train3)
+test3  <- st_drop_geometry(test3)
+
+# ============================================================
+# 4. RECIPE
+# ============================================================
+
+xgb_recipe <- recipe(log_price ~ ., data = train3) %>%
+  
+  step_rm(
+    property_id,
+    UPZ, LocNombre
   ) %>%
-  select(-price)
-
-test2 <- test %>%
-  mutate(
-    lat_lon_interaction = lat * lon,
-    lat2 = lat^2,
-    lon2 = lon^2,
-    
-    banos_por_habitacion = Numero_banos / pmax(Numero_bedrooms, 1),
-    densidad_servicios = n_supermercados_1km + n_colegios_1km
-  )
-
-# ============================================================
-# 3. RECIPE (ROBUSTO)
-# ============================================================
-
-rec <- recipe(log_price ~ ., data = train2) %>%
   
-  # imputación (CLAVE)
-  step_impute_median(all_numeric_predictors()) %>%
-  step_impute_mode(all_nominal_predictors()) %>%
+  step_novel(all_nominal_predictors()) %>%
   
-  # target encoding SOLO UPZ
-  step_lencode_glm(UPZ, outcome = vars(log_price)) %>%
-  step_rm(UPZ) %>%
+  step_unknown(all_nominal_predictors()) %>%
   
-  # logical → numeric
-  step_mutate(across(where(is.logical), as.integer)) %>%
+  step_dummy(all_nominal_predictors()) %>%
   
-  # dummies
-  step_dummy(all_nominal_predictors(), one_hot = TRUE) %>%
-  
-  # limpieza
   step_zv(all_predictors())
 
+
 # ============================================================
-# 4. MODELO XGBOOST
+# 5. MODELO XGBOOST
 # ============================================================
 
-gbm_spec <- boost_tree(
+xgb_spec <- boost_tree(
+  
   trees = tune(),
+  
   tree_depth = tune(),
+  
   learn_rate = tune(),
+  
+  min_n = tune(),
+  
   loss_reduction = tune(),
-  sample_size = tune(),
-  min_n = tune()
+  
+  sample_size = tune()
+  
 ) %>%
+  
   set_engine(
     "xgboost",
-    eval_metric = "mae"
+    nthread = parallel::detectCores() - 1
   ) %>%
+  
   set_mode("regression")
 
 # ============================================================
-# 5. WORKFLOW
+# 6. WORKFLOW
 # ============================================================
 
-gbm_wf <- workflow() %>%
-  add_recipe(rec) %>%
-  add_model(gbm_spec)
+xgb_wf <- workflow() %>%
+  add_recipe(xgb_recipe) %>%
+  add_model(xgb_spec)
 
 # ============================================================
-# 6. GRID (BUENO Y ESTABLE)
-# ============================================================
-
-library(dials)
-
-gbm_grid <- grid_space_filling(
-  trees(range = c(800, 1800)),
-  tree_depth(range = c(4, 10)),
-  learn_rate(range = c(-3, -1)),   # 0.001 - 0.1
-  loss_reduction(),
-  sample_size = sample_prop(range = c(0.6, 1)),
-  min_n(range = c(5, 25)),
-  size = 40
-)
-
-# ============================================================
-# 7. SPATIAL CV (EL IMPORTANTE)
+# 7. ESQUEMAS CV
 # ============================================================
 
 set.seed(123)
 
+# -----------------------------
+# CV clásico
+# -----------------------------
+
+folds_cv <- vfold_cv(
+  train3,
+  v = 5
+)
+
+# -----------------------------
+# Spatial CV UPZ
+# -----------------------------
+
 folds_spatial <- group_vfold_cv(
-  train2,
+  train3,
   group = UPZ,
   v = 5
 )
 
-gbm_spatial <- tune_grid(
-  gbm_wf,
-  resamples = folds_spatial,
-  grid = gbm_grid,
+# -----------------------------
+# Spatial Blocks
+# -----------------------------
+
+train_sf <- st_as_sf(
+  train3,
+  coords = c("lon", "lat"),
+  crs = 4326,
+  remove = FALSE
+)
+
+spatial_blocks <- spatial_block_cv(
+  train_sf,
+  v = 5
+)
+
+# ============================================================
+# 8. GRID EXPRESS
+# ============================================================
+
+xgb_grid <- grid_space_filling(
+  
+  trees(range = c(600L, 1600L)),
+  
+  tree_depth(range = c(5L, 6L)),
+  
+  min_n(range = c(20L, 50L)),
+  
+  learn_rate(range = c(-1.4, -1.1)),  loss_reduction(),
+  
+  sample_size = sample_prop(range = c(0.5, 0.85)),
+  
+  size = 50
+  
+)
+
+# ============================================================
+# 9. PARALELIZACIÓN
+# ============================================================
+
+cl <- makePSOCKcluster(
+  parallel::detectCores() - 1
+)
+
+registerDoParallel(cl)
+
+# ============================================================
+# 10. CV NORMAL
+# ============================================================
+
+xgb_cv <- tune_grid(
+  
+  xgb_wf,
+  
+  resamples = folds_cv,
+  
+  grid = xgb_grid,
+  
   metrics = metric_set(mae),
-  control = control_grid(save_pred = TRUE)
+  
+  control = control_grid(
+    save_pred = TRUE,
+    verbose = TRUE
+  )
 )
 
-spatial_results <- collect_metrics(gbm_spatial)
-
-print(spatial_results)
-
-# ============================================================
-# 8. MEJOR MODELO
-# ============================================================
-
-best_params <- select_best(gbm_spatial, metric = "mae")
-
-final_gbm <- finalize_workflow(gbm_wf, best_params)
+cv_metrics <- collect_metrics(xgb_cv) %>%
+  mutate(validacion = "CV")
 
 # ============================================================
-# 9. FIT FINAL
+# 11. SPATIAL CV
 # ============================================================
 
-final_model <- fit(final_gbm, data = train2)
-
-# ============================================================
-# 10. PREDICCIÓN
-# ============================================================
-
-pred_log <- predict(final_model, test2)
-
-# sanity check
-print(sum(is.na(pred_log)))  # debe ser 0
-
-# ============================================================
-# 11. SUBMISSION
-# ============================================================
-
-submission <- data.frame(
-  property_id = test_feat$property_id,
-  price = exp(pred_log$.pred)
+xgb_spatial <- tune_grid(
+  
+  xgb_wf,
+  
+  resamples = folds_spatial,
+  
+  grid = xgb_grid,
+  
+  metrics = metric_set(mae),
+  
+  control = control_grid(
+    save_pred = TRUE,
+    verbose = TRUE
+  )
 )
 
-# opcional: recorte de outliers extremos
-submission$price <- pmax(submission$price, 50000000)
-
-# guardar con nombre inteligente
-file_name <- sprintf(
-  "XGB_spatial_t%d_d%d_lr%.4f_min%d_s%.2f.csv",
-  best_params$trees,
-  best_params$tree_depth,
-  best_params$learn_rate,
-  best_params$min_n,
-  best_params$sample_size
-)
-
-write.csv(submission, file_name, row.names = FALSE)
+spatial_metrics <- collect_metrics(xgb_spatial) %>%
+  mutate(validacion = "Spatial")
 
 # ============================================================
-# 12. STOP PARALLEL
+# 12. SPATIAL BLOCKS
+# ============================================================
+
+xgb_blocks <- tune_grid(
+  
+  xgb_wf,
+  
+  resamples = spatial_blocks,
+  
+  grid = xgb_grid,
+  
+  metrics = metric_set(mae),
+  
+  control = control_grid(
+    save_pred = TRUE,
+    verbose = TRUE
+  )
+)
+
+blocks_metrics <- collect_metrics(xgb_blocks) %>%
+  mutate(validacion = "Spatial Blocks")
+
+# ============================================================
+# 13. RESULTADOS
+# ============================================================
+
+resultados_finales <- bind_rows(
+  cv_metrics,
+  spatial_metrics,
+  blocks_metrics
+)
+
+print(
+  resultados_finales %>%
+    arrange(mean)
+)
+
+# ============================================================
+# 14. MEJORES HIPERPARÁMETROS
+# ============================================================
+
+best_cv <- select_best(
+  xgb_cv,
+  metric = "mae"
+)
+
+best_spatial <- select_best(
+  xgb_spatial,
+  metric = "mae"
+)
+
+best_blocks <- select_best(
+  xgb_blocks,
+  metric = "mae"
+)
+
+print(best_cv)
+print(best_spatial)
+print(best_blocks)
+
+# ============================================================
+# 15. WORKFLOWS FINALES
+# ============================================================
+
+final_cv_wf <- finalize_workflow(
+  xgb_wf,
+  best_cv
+)
+
+final_spatial_wf <- finalize_workflow(
+  xgb_wf,
+  best_spatial
+)
+
+final_blocks_wf <- finalize_workflow(
+  xgb_wf,
+  best_blocks
+)
+
+# ============================================================
+# 16. FIT FINAL
+# ============================================================
+
+final_cv <- fit(
+  final_cv_wf,
+  data = train3
+)
+
+final_spatial <- fit(
+  final_spatial_wf,
+  data = train3
+)
+
+final_blocks <- fit(
+  final_blocks_wf,
+  data = train3
+)
+
+# ============================================================
+# 17. PREDICCIONES
+# ============================================================
+
+pred_cv <- predict(
+  final_cv,
+  new_data = test3
+)
+
+pred_spatial <- predict(
+  final_spatial,
+  new_data = test3
+)
+
+pred_blocks <- predict(
+  final_blocks,
+  new_data = test3
+)
+
+# ============================================================
+# 18. SUBMISSIONS
+# ============================================================
+
+submission_cv <- data.frame(
+  property_id = test2$property_id,
+  price = round(exp(pred_cv$.pred), 0)
+)
+
+submission_spatial <- data.frame(
+  property_id = test2$property_id,
+  price = round(exp(pred_spatial$.pred), 0)
+)
+
+submission_blocks <- data.frame(
+  property_id = test2$property_id,
+  price = round(exp(pred_blocks$.pred), 0)
+)
+
+# ============================================================
+# 19. EXPORTAR CSV
+# ============================================================
+
+write.csv(
+  submission_cv,
+  "03_outputs/01_results/XGB_cv.csv",
+  row.names = FALSE
+)
+
+write.csv(
+  submission_spatial,
+  "03_outputs/01_results/XGB_spatial.csv",
+  row.names = FALSE
+) 
+
+write.csv(
+  submission_blocks,
+  "03_outputs/01_results/XGB_blocks.csv",
+  row.names = FALSE
+)
+
+# ============================================================
+# 20. HISTOGRAMA
+# ============================================================
+
+preds_plot <- bind_rows(
+  
+  submission_cv %>%
+    mutate(modelo = "CV"),
+  
+  submission_spatial %>%
+    mutate(modelo = "Spatial"),
+  
+  submission_blocks %>%
+    mutate(modelo = "Spatial Blocks")
+)
+
+hist_XGB <- ggplot(
+  preds_plot,
+  aes(x = price, fill = modelo)
+) +
+  
+  geom_histogram(
+    bins = 50,
+    alpha = 0.45,
+    position = "identity"
+  ) +
+  
+  scale_x_log10() +
+  
+  labs(
+    title = "Distribución de predicciones XGBoost",
+    x = "Precio",
+    y = "Frecuencia",
+    fill = "Modelo"
+  ) +
+  
+  theme_minimal()
+
+hist_XGB
+
+# ============================================================
+# 21. GUARDAR HISTOGRAMA
+# ============================================================
+
+ggsave(
+  filename = "03_outputs/02_plots/hist_XGB.png",
+  plot = hist_XGB,
+  width = 10,
+  height = 6,
+  dpi = 300
+)
+
+# ============================================================
+# 22. DETENER CLUSTER
 # ============================================================
 
 stopCluster(cl)
-registerDoSEQ()
+
+print("✅ XGBoost finalizado correctamente")
