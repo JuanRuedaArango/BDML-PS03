@@ -51,6 +51,14 @@
 
 library(dplyr)
 library(fastDummies)
+library(readxl)
+library(writexl)
+library(dials)
+library(embed)
+library(workflows)
+library(rsample)
+library(parsnip)
+library(writexl)
 
 # =========================================================
 # 1. PREPARACIÓN DE DATOS
@@ -291,8 +299,36 @@ test_out <- test_out %>%
     Tamaño3 = full_data$PC322222[(n_train + 1):nrow(full_data)]
   )
 
-train2<-train_out
-test2<-test_out
+train2 <- train_out %>%
+  select(
+    -city,
+    -operation_type,
+    -UPLCODIGO,
+    -description,
+    -title,
+    -CODIGO_MANZANA,
+    -CMIUUPLA,
+    -CMNOMUPLA,
+    -texto,
+    -title_len,
+    -desc_len
+  )
+
+test2 <- test_out %>%
+  select(
+    -city,
+    -operation_type,
+    -UPLCODIGO,
+    -description,
+    -title,
+    -CODIGO_MANZANA,
+    -CMIUUPLA,
+    -CMNOMUPLA,
+    -texto,
+    -title_len,
+    -desc_len
+  )
+
 
 write_xlsx(
   train2,
