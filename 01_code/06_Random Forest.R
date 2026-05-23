@@ -1,13 +1,3 @@
-# ============================================================
-# 1. LIBRERÍAS
-# ============================================================
-
-library(tidymodels)
-library(spatialsample)
-library(sf)
-library(dplyr)
-library(ggplot2)
-library(doParallel)
 
 # ============================================================
 # 2. COPIAS

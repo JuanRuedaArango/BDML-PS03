@@ -2,17 +2,6 @@
 # GBM
 # =========================
 
-# ============================================================
-# 1. LIBRERÍAS
-# ============================================================
-
-library(caret)
-library(tidymodels)
-library(dplyr)
-library(ggplot2)
-library(doParallel)
-library(sf)
-library(spatialsample)
 
 # ============================================================
 # 2. COPIAS

@@ -1,18 +1,5 @@
 
 # ============================================================
-# 1. LIBRERÍAS
-# ============================================================
-
-library(sl3)
-library(dplyr)
-library(recipes)
-library(rsample)
-library(spatialsample)
-library(sf)
-library(tibble)
-library(origami)
-
-# ============================================================
 # 2. PREPROCESAMIENTO
 # ============================================================
 
