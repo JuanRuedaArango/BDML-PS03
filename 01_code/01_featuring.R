@@ -65,38 +65,22 @@
 #       - Nivel de seguridad
 #       - Número de predios
 #
-# =========================================================
-# LIBRERÍAS
-# =========================================================
 
-library(pacman)
 
-p_load(
-  rio,
-  tidyverse,
-  tidymodels,
-  recipes,
-  workflows,
-  nnet,
-  utsf,
-  sf,
-  jsonlite,
-  ggplot2,
-  gganimate,
-  gifski,
-  tidytext,
-  stringr,
-  tidyr,
-  osmdata,
-  FNN,
-  writexl,
-  readr,
-  dplyr
-)
 # =========================================================
 # RUTA Y DATOS
 # =========================================================
-setwd("D:/Users/Usuario/Documents/BDML-PS03/02_data")
+BASES_DIR <- getOption("bases_dir")
+
+if (is.null(BASES_DIR) || !dir.exists(BASES_DIR)) {
+  stop(
+    "\n[ERROR] No existe la opción global 'bases_dir'.\n",
+    "Ejecuta primero:\n",
+    '  source("01_code/00_rundirectory.R")\n'
+  )
+}
+
+setwd(BASES_DIR)
 
 train <- read.csv("train.csv")
 test  <- read.csv("test.csv")
@@ -425,11 +409,6 @@ min_dist <- function(props, points){
 }
 
 
-
-library(sf)
-library(osmdata)
-library(FNN)
-library(dplyr)
 bbox <- getbb("Bogotá Colombia")
 options(osmdata.overpass_timeout = 180)
 # =========================================================
