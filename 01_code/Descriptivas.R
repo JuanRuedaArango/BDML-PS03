@@ -1,17 +1,9 @@
 # ============================================================
-# ESTADÍSTICAS DESCRIPTIVAS - PROBLEM SET 3
-# Bases finales: Train y Test
+# 0. Bases desde el pipeline
 # ============================================================
 
-# ============================================================
-# 0. Librerías y paths
-# ============================================================
-if (!requireNamespace("pacman", quietly = TRUE)) install.packages("pacman")
-
-pacman::p_load(
-  readxl, dplyr, tidyr, ggplot2, gt, scales,
-  stringr, forcats, purrr, readr
-)
+train_raw <- train2
+test_raw  <- test2
 
 path_figures <- "03_outputs/figures"
 path_tables  <- "03_outputs/tables"
@@ -19,21 +11,10 @@ path_tables  <- "03_outputs/tables"
 dir.create(path_figures, recursive = TRUE, showWarnings = FALSE)
 dir.create(path_tables,  recursive = TRUE, showWarnings = FALSE)
 
-# Rutas directas en el computador
-train_path <- "C:/Users/herna/Downloads/Base_Train_Final.xlsx"
-test_path  <- "C:/Users/herna/Downloads/Base_Test_Final.xlsx"
-
-if (!file.exists(train_path)) stop("No encontré la base Train en: ", train_path)
-if (!file.exists(test_path))  stop("No encontré la base Test en: ", test_path)
-
-train_raw <- read_excel(train_path)
-test_raw  <- read_excel(test_path)
-
-cat("Archivo train:", train_path, "\n")
-cat("Archivo test :", test_path,  "\n")
+cat("Base train usada: train2\n")
+cat("Base test usada : test2\n")
 cat("Dim train:", dim(train_raw), "\n")
 cat("Dim test :", dim(test_raw),  "\n\n")
-
 
 # ============================================================
 # 1. Variables solicitadas

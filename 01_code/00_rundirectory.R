@@ -130,28 +130,46 @@ cat("\n[INFO] Carpeta de datos encontrada en:\n")
 print(BASES_DIR)
 
 # ============================================================
-# 3. PAQUETES
+# SECTION 2: Paquetes
 # ============================================================
 
 if (!requireNamespace("pacman", quietly = TRUE)) {
   install.packages("pacman")
 }
 
+# Verificación importante por el error de rlang/tidymodels
+if (!requireNamespace("rlang", quietly = TRUE) ||
+    packageVersion("rlang") < "1.2.0") {
+  
+  install.packages("rlang")
+  
+  stop(
+    "\n[INFO] Se instaló o actualizó 'rlang'.\n",
+    "Reinicia la sesión de R y vuelve a correr:\n",
+    '  source("01_code/00_rundirectory.R")\n',
+    call. = FALSE
+  )
+}
+
 pacman::p_load(
+  # ==========================================================
   # Base de trabajo
-  rio,
-  readr,
-  readxl,
-  writexl,
+  # ==========================================================
+  tidyverse,
   dplyr,
   tidyr,
   stringr,
   purrr,
   forcats,
   tibble,
-  tidyverse,
+  readr,
+  readxl,
+  writexl,
+  rio,
   
+  # ==========================================================
   # Tidymodels y modelamiento
+  # ==========================================================
   tidymodels,
   recipes,
   rsample,
@@ -162,34 +180,57 @@ pacman::p_load(
   dials,
   embed,
   
+  # ==========================================================
   # Modelos
+  # ==========================================================
+  caret,
   xgboost,
   ranger,
   rpart,
   glmnet,
-  nnet,
+  bonsai,
   
+  # ==========================================================
+  # SuperLearner / Stacking
+  # ==========================================================
+  sl3,
+  origami,
+  
+  # ==========================================================
   # Validación espacial
+  # ==========================================================
   spatialsample,
   
+  # ==========================================================
   # Espacial
+  # ==========================================================
   sf,
   osmdata,
   FNN,
   
-  # Texto y visualización
+  # ==========================================================
+  # Texto
+  # ==========================================================
   tidytext,
+  
+  # ==========================================================
+  # Visualización y tablas
+  # ==========================================================
   ggplot2,
-  gganimate,
-  gifski,
   gt,
   scales,
+  gganimate,
+  gifski,
   
+  # ==========================================================
   # Paralelización
+  # ==========================================================
   doParallel,
   parallel,
   
+  # ==========================================================
   # Utilidades
+  # ==========================================================
   jsonlite,
   fastDummies
 )
