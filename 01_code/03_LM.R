@@ -1,19 +1,3 @@
-# ============================================================
-# LIBRERÍAS
-# ============================================================
-
-library(tidyverse)
-library(tidymodels)
-library(tune)
-library(dials)
-library(yardstick)
-library(workflows)
-library(parsnip)
-library(spatialsample)
-library(readxl)
-library(sf)
-library(embed)
-library(rsample)
 
 
 # ============================================================
