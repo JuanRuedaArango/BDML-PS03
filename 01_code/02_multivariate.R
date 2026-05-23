@@ -45,29 +45,10 @@
 #   • PCA - Tamaño:
 #       Variables físicas y dimensionales del inmueble.
 #
-# =========================================================
-# LIBRERÍAS
-# =========================================================
-
-library(dplyr)
-library(fastDummies)
-library(readxl)
-library(writexl)
-library(dials)
-library(embed)
-library(workflows)
-library(rsample)
-library(parsnip)
-library(writexl)
 
 # =========================================================
 # 1. PREPARACIÓN DE DATOS
 # =========================================================
-
-setwd("D:/Users/Usuario/Documents/BDML-PS03")
-
-train_out <- read_xlsx("03_outputs/03_datasets/train_out.xlsx")
-test_out  <- read_xlsx("03_outputs/03_datasets/test_out.xlsx")
 
 train_no_target <- train_out
 test_out$price <- as.numeric(as.character(test_out$price))
@@ -328,14 +309,3 @@ test2 <- test_out %>%
     -title_len,
     -desc_len
   )
-
-
-write_xlsx(
-  train2,
-  "D:/Users/Usuario/Documents/BDML-PS03/03_outputs/03_datasets/train2.xlsx"
-)
-
-write_xlsx(
-  test2,
-  "D:/Users/Usuario/Documents/BDML-PS03/03_outputs/03_datasets/test2.xlsx"
-)
